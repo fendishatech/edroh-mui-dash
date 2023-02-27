@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
 import { ColorModeContext, useMode } from "../../../context/themeContext";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import TopBar from "./TopBar";
-import Sidebar from "./sidebar";
+import Sidebar from "./Sidebar";
 
 const Layout = () => {
   const [theme, colorMode] = useMode();
@@ -11,9 +11,12 @@ const Layout = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="app">
+          <Sidebar />
           <main className="content">
             <TopBar />
-            <Outlet />
+            <Box p={2}>
+              <Outlet />
+            </Box>
           </main>
         </div>
       </ThemeProvider>
