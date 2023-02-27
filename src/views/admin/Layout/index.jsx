@@ -1,16 +1,23 @@
 import { Outlet } from "react-router-dom";
-import Topbar from "./topbar";
+import { ColorModeContext, useMode } from "../../../context/themeContext";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import TopBar from "./TopBar";
 import Sidebar from "./sidebar";
-import TopBar from "./topbar";
+
 const Layout = () => {
+  const [theme, colorMode] = useMode();
   return (
-    <>
-      <Sidebar />
-      <div className="">
-        <TopBar />
-        <Outlet />
-      </div>
-    </>
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <div className="app">
+          <main className="content">
+            <TopBar />
+            <Outlet />
+          </main>
+        </div>
+      </ThemeProvider>
+    </ColorModeContext.Provider>
   );
 };
 
