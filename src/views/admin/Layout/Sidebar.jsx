@@ -5,9 +5,19 @@ import {
   Menu,
   MenuItem,
 } from "react-pro-sidebar";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { Link } from "react-router-dom";
-// import "/react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../../context/themeContext";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
@@ -30,56 +40,84 @@ const Sidebar = () => {
   return (
     <Box
       sx={{
-        "& .pro-sidebar-inner": {
-          background: `${colors.primary[400]} !important`,
-        },
-        "& .pro-icon-wrapper": {
-          backgroundColor: "transparent !important",
-        },
-        "& .pro-inner-item": {
-          padding: "5px 35px 5px 20px !important",
-        },
-        "& .pro-inner-item:hover": {
-          color: "#868dfb !important",
-        },
-        "& .pro-menu-item.active": {
-          color: "#6870fa !important",
-        },
+        width: isCollapsed ? "60px" : "300px",
+        position: "fixed",
+        zIndex: "1",
       }}
     >
-      <ProSidebarProvider>
-        <ProSidebar collapsed={isCollapsed}>
-          <Menu iconShape="square">
-            {/* LOGO AND MENU ICON */}
-            <MenuItem
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
-              style={{
-                margin: "10px 0 20px 0",
-                color: colors.grey[100],
-              }}
-            >
-              {!isCollapsed && (
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  ml="15px"
-                >
-                  <Typography variant="h3" color={colors.grey[100]}>
-                    ADMINIS
-                  </Typography>
-                  <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-                    <MenuOutlinedIcon />
-                  </IconButton>
-                </Box>
-              )}
-            </MenuItem>
-          </Menu>
-        </ProSidebar>
-      </ProSidebarProvider>
+      {/* Header */}
+      <Box display="flex" justifyContent="space-between">
+        {!isCollapsed && (
+          <Typography sx={{ paddingLeft: "10px", paddingTop: "18px" }}>
+            ADMIN
+          </Typography>
+        )}
+        <IconButton>
+          <MenuOutlinedIcon
+            sx={{ fontSize: 36 }}
+            onClick={() => setIsCollapsed(!isCollapsed)}
+          />
+        </IconButton>
+      </Box>
+      <Divider />
+      <List>
+        <ListItem key={"Clients"} disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <PersonOutlinedIcon />
+            </ListItemIcon>
+            {!isCollapsed && <ListItemText primary={"Clients"} />}
+          </ListItemButton>
+        </ListItem>
+      </List>
+      <Divider />
+      <List>
+        {["Users", "Clients", "Members", "Loan"].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? (
+                  <PersonOutlinedIcon />
+                ) : (
+                  <MenuOutlinedIcon />
+                )}
+              </ListItemIcon>
+              {!isCollapsed && <ListItemText primary={text} />}
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        <ListItem key={"Settings"} disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <PersonOutlinedIcon />
+            </ListItemIcon>
+            {!isCollapsed && <ListItemText primary={"Settings"} />}
+          </ListItemButton>
+        </ListItem>
+      </List>
     </Box>
   );
 };
 
 export default Sidebar;
+
+const Item = ({ title, to, icon, selected, setSelected }) => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  return (
+    <MenuItem
+      active={selected === title}
+      style={{
+        color: colors.grey[100],
+      }}
+      onClick={() => setSelected(title)}
+      icon={icon}
+    >
+      <Typography>{title}</Typography>
+      <Link to={to} />
+    </MenuItem>
+  );
+};
